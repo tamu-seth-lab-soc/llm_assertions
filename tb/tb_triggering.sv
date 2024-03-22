@@ -3,7 +3,7 @@
 /* verilator lint_off EOFNEWLINE */
 /* verilator lint_off WIDTHTRUNC */
 /* verilator lint_off UNUSEDSIGNAL */
-module tb_simple #(
+module tb_triggering #(
         parameter longint unsigned MAX_CYCLES = 100000000
       , parameter WAVE_ENABLE = 0
     ) ();
@@ -12,13 +12,14 @@ module tb_simple #(
   reg clk; 
   reg rst_n;
   reg walk; 
-  wire [1:0] signal;
+  wire [1:0] signal, signal_golden; 
+  wire signal_diff;
 
   // Generate clock and reset
   localparam int unsigned CLOCK_PERIOD = 10ns;
   longint unsigned cycles;
   initial begin
-    $display("\nINFO: Starting simulation with simple inputs\n");
+    $display("\nINFO: Starting simulation with bug triggering inputs\n");
     clk = 1'b0;
     rst_n = 1'b0;
     repeat(8)
@@ -50,7 +51,7 @@ module tb_simple #(
         
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
@@ -60,9 +61,24 @@ module tb_simple #(
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b1; 
+    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b1; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b1; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b0; 
+    @(posedge clk); walk = 1'b1; 
+    @(posedge clk); walk = 1'b1; 
+    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
@@ -96,8 +112,8 @@ module tb_simple #(
   always @(posedge clk) begin
     if (!rst_n) begin ; end
     else begin
-      $display("time=%4d, walk=%h, signal=%6s"
-              , $time, walk, getStateName(signal)); 
+      $display("time=%4d, walk=%h, signal=%6s, signal_golden=%6s, signal_diff=%h"
+              , $time, walk, getStateName(signal), getStateName(signal_golden), signal_diff); 
     end
   end
 
@@ -112,6 +128,13 @@ module tb_simple #(
   end
 
 
+  //// Assertions
+  //assert property (@(posedge clk) disable iff ((!rst_n)) 
+  //                  (signal == RED) |-> ($past(signal) == YELLOW) || ($past(signal) == RED))
+  //    else $display("ERROR, Yellow signal skipped!!, time=%4d, signal=%6s, past_signa=%6s"
+  //            , $time, getStateName(signal), getStateName($past(signal))); 
+
+
   //// Initiate module
   traffic_controller #(
   ) tc_u (
@@ -120,6 +143,16 @@ module tb_simple #(
     , .walk_i   (walk)
     , .signal_o (signal)  
   ); 
+
+  traffic_controller_golden #(
+  ) tc_golden_u (
+      .clk      (clk)
+    , .rst_ni   (!(!rst_n || !test_rst_n))
+    , .walk_i   (walk)
+    , .signal_o (signal_golden)  
+  ); 
+
+  assign signal_diff = (signal != signal_golden); 
 
 endmodule
 

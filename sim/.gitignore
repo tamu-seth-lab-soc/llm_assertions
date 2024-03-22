@@ -1,0 +1,10 @@
+*.sw*
+AN.DB
+DVE*
+*.log
+csrc
+simv*
+ucli.key
+*.vpd
+work*
+
