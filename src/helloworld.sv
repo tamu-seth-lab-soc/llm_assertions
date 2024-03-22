@@ -1,8 +1,11 @@
 module helloworld(); 
   
   initial begin
-    $dispay("Welcome to LLM tutorial!\n"); 
-   end
+    $display("\n\n----------------------------\n"); 
+    $display("  Welcome to LLM tutorial!  \n"); 
+    $display("----------------------------\n\n"); 
+    $finish(); 
+  end
 
 endmodule
 

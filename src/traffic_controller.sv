@@ -3,7 +3,7 @@
 /* verilator lint_off EOFNEWLINE */
 /* verilator lint_off WIDTHTRUNC */
 /* verilator lint_off UNUSEDSIGNAL */
-module traffic_controller (
+module traffic_controller(
     input clk, 
     input rst_ni,
     input walk_i, 
@@ -36,7 +36,11 @@ module traffic_controller (
             signal_o <= #1 GREEN; 
         end
         GREEN: begin
-          signal_o <= #1 YELLOW; 
+          if (walk_i) begin
+            signal_o <= #1 RED; 
+          end
+          else
+            signal_o <= #1 YELLOW; 
         end
         YELLOW: begin
           signal_o <= #1 RED; 

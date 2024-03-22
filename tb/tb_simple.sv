@@ -5,21 +5,20 @@
 /* verilator lint_off UNUSEDSIGNAL */
 module tb_simple #(
         parameter longint unsigned MAX_CYCLES = 100000000
-      , parameter WAVE_ENABLE = 1
+      , parameter WAVE_ENABLE = 0
     ) ();
 
   // Define input/output variables
   reg clk; 
   reg rst_n;
   reg walk; 
-  wire [1:0] signal, signal_buggy; 
-  wire signal_diff;
+  wire [1:0] signal;
 
   // Generate clock and reset
   localparam int unsigned CLOCK_PERIOD = 10ns;
   longint unsigned cycles;
   initial begin
-    $display("\nINFO: Starting simulation\n");
+    $display("\nINFO: Starting simulation with simple inputs\n");
     clk = 1'b0;
     rst_n = 1'b0;
     repeat(8)
@@ -51,17 +50,8 @@ module tb_simple #(
         
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
@@ -71,14 +61,8 @@ module tb_simple #(
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b1; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
     @(posedge clk); walk = 1'b0; 
@@ -109,8 +93,8 @@ module tb_simple #(
   always @(posedge clk) begin
     if (!rst_n) begin ; end
     else begin
-      $display("walk=%h, signal=%6s, signal_buggy=%6s, signal_diff=%h"
-              , walk, getStateName(signal), getStateName(signal_buggy), signal_diff); 
+      $display("walk=%h, signal=%6s"
+              , walk, getStateName(signal)); 
     end
   end
 
@@ -126,11 +110,7 @@ module tb_simple #(
 
 
   //// Assertions
-  //assert property (@(posedge clk) disable iff ((!rst_n)) (data[0]))
-  //    else $display("ERROR, assertion violated, time=%4d, data=%h", $time, data); 
-
-  
-  //assert property (@(posedge clk)  (0))
+  //assert property (@(posedge clk) disable iff ((!rst_n)) ()
   //    else $display("ERROR, assertion violated, time=%4d, data=%h", $time, data); 
 
 
@@ -142,16 +122,6 @@ module tb_simple #(
     , .walk_i   (walk)
     , .signal_o (signal)  
   ); 
-
-  traffic_controller_buggy #(
-  ) tc_buggy_u (
-      .clk      (clk)
-    , .rst_ni   (!(!rst_n || !test_rst_n))
-    , .walk_i   (walk)
-    , .signal_o (signal_buggy)  
-  ); 
-
-  assign signal_diff = (signal != signal_buggy); 
 
 endmodule
 
