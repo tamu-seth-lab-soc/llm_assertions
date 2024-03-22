@@ -102,16 +102,11 @@ module tb_simple #(
   initial begin
     if (WAVE_ENABLE == 1) begin
       $display("\nINFO: Dumping waveform\n");
-      $vcdpluson;
+      //$vcdpluson;
       //$dumpfile("testttt.vcd");
       //$dumpon; 
     end
   end
-
-
-  //// Assertions
-  //assert property (@(posedge clk) disable iff ((!rst_n)) ()
-  //    else $display("ERROR, assertion violated, time=%4d, data=%h", $time, data); 
 
 
   //// Initiate module
