@@ -49,49 +49,49 @@ module tb_triggering #(
     wait(~rst_n); // wait for reset
     wait(rst_n); // wait for reset
         
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b1; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); walk = 1'b0; 
-    @(posedge clk); 
-    @(posedge clk); 
-    @(posedge clk); 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b1; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); walk = 1'b0; 
+    @(negedge clk); 
+    @(negedge clk); 
+    @(negedge clk); 
     $finish(); 
   end
 
@@ -129,10 +129,10 @@ module tb_triggering #(
 
 
   //// Assertions
-  //assert property (@(posedge clk) disable iff ((!rst_n)) 
-  //                  (signal == RED) |-> ($past(signal) == YELLOW) || ($past(signal) == RED))
-  //    else $display("ERROR, Yellow signal skipped!!, time=%4d, signal=%6s, past_signa=%6s"
-  //            , $time, getStateName(signal), getStateName($past(signal))); 
+  assert property (@(posedge clk) disable iff ((!rst_n)) 
+                    (signal == RED) |-> ($past(signal) == YELLOW) || ($past(signal) == RED))
+      else $display("ERROR, Yellow signal skipped!!, time=%4d, signal=%6s, past_signa=%6s"
+              , $time, getStateName(signal), getStateName($past(signal))); 
 
 
   //// Initiate module
