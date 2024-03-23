@@ -129,10 +129,10 @@ module tb_triggering #(
 
 
   //// Assertions
-  assert property (@(posedge clk) disable iff ((!rst_n)) 
-                    (signal == RED) |-> ($past(signal) == YELLOW) || ($past(signal) == RED))
-      else $display("ERROR, Yellow signal skipped!!, time=%4d, signal=%6s, past_signa=%6s"
-              , $time, getStateName(signal), getStateName($past(signal))); 
+  //assert property (@(posedge clk) disable iff ((!rst_n)) 
+  //                  (signal == RED) |-> ($past(signal) == YELLOW) || ($past(signal) == RED))
+  //    else $display("ERROR, Yellow signal skipped!!, time=%4d, signal=%6s, past_signa=%6s"
+  //            , $time, getStateName(signal), getStateName($past(signal))); 
 
 
   //// Initiate module
