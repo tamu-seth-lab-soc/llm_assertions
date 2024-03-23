@@ -1,9 +1,9 @@
 module helloworld(); 
   
   initial begin
-    $display("\n\n----------------------------\n"); 
-    $display("  Welcome to LLM tutorial!  \n"); 
-    $display("----------------------------\n\n"); 
+    $display("\n\n----------------------------------------------------------------"); 
+    $display("  Welcome to the tutorial on generating assertions using LLMs!  "); 
+    $display("----------------------------------------------------------------\n"); 
     $finish(); 
   end
 
